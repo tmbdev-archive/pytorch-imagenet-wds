@@ -1,0 +1,70 @@
+#!/bin/bash
+
+
+die() {
+    echo "ERROR: $*"
+    exit 1
+}
+
+
+cmd_clean() { # remove temporary files
+    rm -rf venv shards
+    rm -f data
+    rm -f *-info.txt *.pth *.pth.tar *.log
+}
+
+
+cmd_venv() { # set up a virtualenv
+    test -d venv || python3 -m venv venv
+    source venv/bin/activate
+    pip3 install -U pip
+    pip3 install -U -r requirements.txt
+    python3 -m bash_kernel.install
+    pip3 install -U neovim
+    pip3 install -U jupyterlab
+    pip3 install -U pytest
+}
+
+cmd_makeshards() {  # make ./shards from ./data
+    test -d ./venv || die "'./run venv' first to create the virtual environment"
+    test -f ./venv/bin/activate || die "no venv/bin/activate found"
+    test -e ./data || die "make a symlink from the ImageNet data directory to ./data"
+    test -e ./data/train || die "./data/train: not found"
+    test -e ./data/val || die "./data/val: not found"
+    rm -rf ./shards/*
+    mkdir -p ./shards
+    source venv/bin/activate
+    export OMP_NUM_THREADS=1
+    python3 ./makeshards.py "$@"
+}
+
+cmd_train() {  # run a training job against ./shards
+    test -d ./venv || die "'./run venv' first to create the virtual environment"
+    test -f ./venv/bin/activate || die "no venv/bin/activate found"
+    test -e ./data || die "make a symlink from the ImageNet data directory to ./data"
+    test -d ./shards || die "run 'makeshards' first"
+    source venv/bin/activate
+    export OMP_NUM_THREADS=1
+    python3 ./main-wds.py "$@"
+}
+
+
+cmd=${1:-help}
+shift
+case $cmd in
+help)
+    echo; echo available commands:; echo
+    grep '^cmd_[_0-9a-z]*() {' "$0" | sed 's/cmd_//;s/\(.*\)() *{* *#* */\1 -- /'
+    ;;
+*.py)
+    set -e
+    cmd_venv > venv.log
+    source venv/bin/activate
+    export OMP_NUM_THREADS=1
+    python3 "$cmd" "$@"
+    ;;
+*)
+    set -e
+    eval "cmd_$cmd" "$@"
+    ;;
+esac

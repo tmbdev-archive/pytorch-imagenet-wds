@@ -1,9 +1,23 @@
 # Introduction
 
-This repo contains a simple example of using WebDataset for training
+WebDataset is an implementation of the IterableDataset API in PyTorch.
+WebDataset can handle training sets that are petabytes large, provides
+efficient I/O when loading data over the network or from cheap hard
+disks, permits efficient training with datasets stored on web servers
+(hence the name), speeds up the startup and debugging of deep learning
+jobs. WebDataset is being integrated into the core PyTorch.
+
+This repo contains a simple example of using
+[WebDataset](http://www.github.com/tmbdev/webdataset) for training
 models on ImageNet using PyTorch.  The code is a derivative of
 the PyTorch Imagenet training example from the [PyTorch examples
 folder](https://github.com/pytorch/examples/tree/master/imagenet).
+
+The purpose of this repository is just to demonstrate how WebDataset
+can be integrated into an existing, well-known deep learning job.
+Since ImageNet is a fairly small dataset, you may only see a small
+difference in load speed when training from local SSD, though you may
+still benefit from faster startup times.
 
 The original code is in `main-orig.py` and the WebDataset-based code is in
 `main-wds.py`. The WebDataset-based code leaves most of the original code

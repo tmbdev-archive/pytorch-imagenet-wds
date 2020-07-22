@@ -1,11 +1,13 @@
 # Introduction
 
-This is a derivative of the PyTorch Imagenet training example from the
-[PyTorch examples folder](https://github.com/pytorch/examples/tree/master/imagenet).
+This repo contains a simple example of using WebDataset for training
+models on ImageNet using PyTorch.  The code is a derivative of
+the PyTorch Imagenet training example from the [PyTorch examples
+folder](https://github.com/pytorch/examples/tree/master/imagenet).
 
 The original code is in `main-orig.py` and the WebDataset-based code is in
-`main-wds.py`; the latter lets you switch between WebDataset and file based
-loading using a command line switch.
+`main-wds.py`. The WebDataset-based code leaves most of the original code
+untouched and only changes the Dataset/DataLoader portions of the code.
 
 # Generating the Shards
 
@@ -37,7 +39,11 @@ reading the metadata.
 # Running Training
 
 You can simply run training using the original and the new data set implementations
-using `./run train`.
+using
+
+```Bash
+$ `./run train`.
+```
 
 Have a look at `main-wds.py` to see the different options for selecting different
 dataset implementations, different augmentation methods

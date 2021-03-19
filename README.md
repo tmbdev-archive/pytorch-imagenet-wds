@@ -1,10 +1,12 @@
-**NB: This repository illustrates how to minimally change an existing PyTorch program
+**This repository illustrates how to minimally change an existing PyTorch program
 to use WebDataset. If you are starting from scratch, you probably want to write your code
 differently. In particular, for large multinode training, your code becomes simpler if
 you don't use epochs and instead train on a continuous stream of batches.**
 
 **Have a look at https://github.com/tmbdev/wds-distributed to understand how
 sharding works with DistributedDataParallel training.**
+
+**NB: This repository needs to be updated to the latest version of WebDataset.**
 
 # Introduction
 
